@@ -1,21 +1,25 @@
 package model;
 
-import model.Calculator;
-
 public class Start {
     private Calculator calculator;
-    private double a;
-    private double b;
-    private double c;
-    private double d;
+    private int a;
+    private int b;
+    private int c;
+    private int d;
 
     private double chuys;
-    private double calcSpec;
-    private double calcPlusBol;
-    private double calcMinusBol;
-    private double calcRasp;
-    private double calcPCPlus;
-    private double calcPCMinus;
+    private double spec;
+    private double ppv;
+    private double npv;
+    private double fnr;
+    private double fpr;
+    private double fdr;
+    private double forr;
+    private double lrpl;
+    private double lrmin;
+    private double rasp;
+    private double acc;
+
 
 
     public Start(){
@@ -25,10 +29,10 @@ public class Start {
     public String action() {
         return "Калькулятор расчета статистических данных" +"\n" +
                 "Введите данные для расчета (через проблел : \n" +
-                "истинно-положительный результат (true-positive, TP) — пациент больной, диагноз положительный;\n" +
-                "ложно-положительный результат (false-positive, FP) — пациент здоров, диагноз положительный;\n" +
-                "ложно-отрицательный результат (false-negative, FN) — пациент больной, диагноз отрицательный; \n" +
-                "истинно-отрицательный результат (true-negative, TN) — пациент здоров, диагноз отрицательный)";
+                "истинно-положительный результат (true-positive, TP) — заболевание есть, тест положительный;\n" +
+                "ложно-отрицательный результат (false-negative, FN) — заболевание есть, тест отрицательный; \n" +
+                "ложно-положительный результат (false-positive, FP) — заболевания нет, тест положительный;\n" +
+                "истинно-отрицательный результат (true-negative, TN) — заболевания нет, тест отрицательный)";
     }
 
     public void calculate(String answer){
@@ -44,17 +48,18 @@ public class Start {
              c = Integer.parseInt(numbers[2]);
            d = Integer.parseInt(numbers[3]);
 
-            chuys = calculator.calcChuvs(a, b);
-            calcSpec = calculator.calcSpec(c, d);
-            calcPlusBol = calculator.calcPlusBol(chuys);
-            calcMinusBol = calculator.calcMinusBol(chuys);
-            calcRasp = calculator.calcRasp(a, b, d, c);
-            calcPCPlus = calculator.calcPCPlus(chuys, d);
-            calcPCMinus = calculator.calcPCMinus(c, b);
-            
-
-            
-
+            chuys = calculator.calcSensitivity(a, b);
+            spec = calculator.calcSpecificity(c, d);
+            ppv = calculator.calcPrecision(a, c);
+            npv = calculator.calcNPV(b, d);
+            fnr = calculator.calcFNR(b, a);
+            fpr = calculator.calcFPR(c, d);
+            fdr = calculator.calcFDR(c, a);
+            forr =calculator.calcFOR(b, d);
+            lrpl = calculator.calcLRplus(chuys, spec);
+            lrmin = calculator.calcLRmin(fnr, spec);
+            rasp = calculator.calcPrevalence(a, b, c, d);
+            acc = calculator.calcACC(a, b, c, d);
 
         } catch (NumberFormatException e) {
             return;
@@ -63,18 +68,24 @@ public class Start {
 
     public String end() {
         return "                 Таблица сопряженности" + "\n" +
-                "            Матрица            |"  +   "Заболевание есть |"  + "Заболевания нет"   +"\n" +
-                "Тест положительный |                " +         a + "           |       " + b + "\n" +
-                "Тест отрицательный   |              " +  c +        "            |       " + d + "\n" +
+                "Матрица       |"  +   "Тест положительный |"  + "Тест отрицательный"   +"\n" +
+                "Заболевание есть |               " +         a + "        |       " + b + "\n" +
+                "Заболевания нет  |              " +  c +        "         |       " + d + "\n" +
                 "\n"+
                 "Результаты расчета: " + "\n" +
                 "\n"+
                 "Чувствительность = " + chuys  + " %" + "\n"+
-                "Специфичность = " + calcSpec +  " %" +"\n" +
-                "Положительная вероятность болезни = " + calcPlusBol +  " %" +"\n" +
-                "Отрицательная вероятность болезни = " + calcMinusBol + " %" +"\n" +
-                "Распространенность заболевания = " +calcRasp +  " %" + "\n" +
-                "Прогностическая ценность положительного результата = " + calcPCPlus  + " %" + "\n" +
-                "Прогностическая ценность отрицательного результата = " + calcPCMinus + " %" + "\n";
+                "Специфичность = " + spec +  " %" +"\n" +
+                "Положительная прогностическая ценность = " + ppv +  " %" +"\n" +
+                "Отрицательная прогностическая ценность = " + npv + " %" +"\n" +
+                "Частота ложноотрицательных результатов = " + fnr +  " %" + "\n" +
+                "Частота ложных выпадений = " + fpr  + " %" + "\n" +
+                "Частота ложных открытий = " + fdr + " %" + "\n" +
+                "Частота ложных пропусков = " + forr  + " %" + "\n" +
+                "Положительное отношение правдоподобия = " + lrpl  +  "\n" +
+                "Отрицательное отношение правдоподобия = " + lrmin  +  "\n" +
+                "Распространенность = " + rasp  + " %" + "\n" +
+                "Точность = " + acc  + " %" + "\n" ;
+
     }
 }
